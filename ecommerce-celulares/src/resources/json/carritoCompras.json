@@ -1,0 +1,22 @@
+[
+    {
+        "id":1,
+        "thumbnail": "https://d3eys52k95jjdh.cloudfront.net/wp-content/uploads/2021/11/Untitled9692.png",
+        "name":"Samsung Galaxy Z Flip 4",
+        "totalItems":"1",
+        "price":"$5.299.900",
+        "total": "$8.399.900"
+    },
+    
+    {
+        "id":2,
+        "thumbnail": "https://images.samsung.com/sg/smartphones/galaxy-z-fold4/images/galaxy-z-fold4_highlights_kv.jpg",
+        "name":"Samsung Galaxy Z Fold 4",
+        "totalItems":"1",
+        "price":"$8.399.900",
+        "total": "$8.399.900"
+    }
+
+    
+    
+]

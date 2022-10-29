@@ -1,0 +1,85 @@
+:root { 
+  --blanco: #ffff;
+  --fuentePrincipal: system-ui;
+  --colorPrincipal: rgb(119, 2, 84);
+  --colorSecundario: black;
+}
+
+.contenedor{
+  display: flex;
+  flex-flow:column;  
+}
+
+
+#menuCarrito {
+display: block;
+}
+
+.menuCarrito {
+  display: flex;
+  gap: 1rem;
+}
+
+.imgCarrito{
+  height: 125px;
+}
+
+.carritoThumb {
+  height: 200px
+}
+
+.enlaceMenu {
+  font-size: 2rem;
+  text-transform: capitalize;
+  text-decoration: none;
+  color: var(--blanco);
+  font-family: var(--fuentePrincipal);
+
+}
+
+.carritoMenu .carritoCompras a{
+  margin-bottom: 10px;
+  text-decoration: none;
+}
+
+.row {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.rowMenu {
+  background-color: var(--colorPrincipal);
+  padding: 1rem;
+}
+
+.rowMenu, .rowTable {
+  display: flex;
+  flex-flow:column;
+  justify-content: center;
+  align-items: center;
+}
+
+.carritoTablePrincipal{
+  background-color: var(--colorPrincipal);
+  color: var(--blanco);
+  font-family: var(--fuentePrincipal);
+}
+
+.carritoMenuTable, .carritoMenuTableTd {
+  font-family: var(--fuentePrincipal);
+  padding: 1rem 6rem;
+  border:1px solid black;
+  text-align: center;
+}
+
+.carritoBoton {
+  padding: 1rem 10rem;
+  font-size: 1rem;
+}
+
+.carritoBotones{
+  display: flex;
+  padding: 3rem;
+  justify-content: end;
+}
+
