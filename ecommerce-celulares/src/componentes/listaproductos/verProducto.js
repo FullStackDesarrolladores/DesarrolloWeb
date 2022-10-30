@@ -1,8 +1,9 @@
 import './verProducto.css'
 import Boton from '../botones/boton';
 
-function VerProducto() {
 
+function VerProducto() {
+  
   const seleccion=JSON.parse(localStorage.getItem("seleccion"))
 
   const adicionarCarrito = () => {
