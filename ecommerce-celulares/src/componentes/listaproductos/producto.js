@@ -10,7 +10,7 @@ function Producto(props) {
       return element.id === props.id;
     });
     if (localStorage.getItem("seleccion") == null) {
-      localStorage.setItem("seleccion", JSON.stringify([productoSeleccionado]))
+      localStorage.setItem("seleccion", JSON.stringify(productoSeleccionado))
     }
     else {
       localStorage.setItem("seleccion", JSON.stringify(productoSeleccionado))

@@ -8,10 +8,12 @@ import VerProducto from './componentes/listaproductos/verProducto'
 import ListaVentas  from './componentes/ventas/listaVentas';
 import CarritoProductos from './componentes/carrito/carritoProductos'
 
+
 function App() {
 
   if (localStorage.getItem("productos") === null) {
     localStorage.setItem("productos", JSON.stringify(listaProductos));
+    localStorage.setItem("carrito","[]");
   }
 
 
