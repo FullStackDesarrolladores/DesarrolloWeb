@@ -33,7 +33,7 @@ function ListaVentas() {
                     {DisplayData}
                     <tr>
                         <td></td>
-                        <td></td>
+                        <td><strong>Total</strong></td>
                         <td>$ {totalVentas}</td>
                     </tr>
                 </tbody>
