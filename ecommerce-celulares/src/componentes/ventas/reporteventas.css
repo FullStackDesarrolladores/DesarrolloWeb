@@ -1,0 +1,39 @@
+body {font-family: Arial, Helvetica, sans-serif;}
+
+h1{
+    text-align: center;
+    color: #fff;
+    background: #870f5d;
+
+}
+
+table, td, th {
+
+    border: 1px solid rgba(0, 0, 0, .2);
+    margin: 30px auto;
+}
+
+table {
+
+    border-collapse: collapse;
+    width: 800px;
+    text-align: center;
+    
+}
+
+th, td {
+
+    padding: 10px 20px;
+   
+}
+
+th {
+
+    background: #870f5d;
+    color: #fff;
+}
+
+tr:hover {
+
+    background: #e5e5e5;
+}
