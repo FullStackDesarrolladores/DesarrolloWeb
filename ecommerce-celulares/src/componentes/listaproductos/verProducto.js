@@ -6,13 +6,15 @@ function VerProducto() {
   
   const seleccion=JSON.parse(localStorage.getItem("seleccion"))
 
+  var productoSeleccionados = [];
+
   const adicionarCarrito = () => {
     
     if (localStorage.getItem("carrito") == null) {
       localStorage.setItem("carrito", JSON.stringify(seleccion))
     }
     else {
-      const productoSeleccionados =JSON.parse(localStorage.getItem("carrito"))
+      productoSeleccionados.push(JSON.parse(localStorage.getItem("carrito")));
       productoSeleccionados.push(seleccion)
       localStorage.setItem("carrito", JSON.stringify(productoSeleccionados))
     }

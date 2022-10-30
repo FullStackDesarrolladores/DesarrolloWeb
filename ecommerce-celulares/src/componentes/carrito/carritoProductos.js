@@ -1,6 +1,6 @@
 import './ventanaCarritoCompras.css'
 import CarritoProducto from './carritoProducto'
-import carritoCompras from './carritoCompras.json'
+
 
 function CarritoProductos() {
 
