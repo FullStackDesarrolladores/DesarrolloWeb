@@ -1,12 +1,13 @@
 import './ventanaCarritoCompras.css'
 import CarritoProducto from './carritoProducto'
-import carritoCompras from './carritoCompras.json'
+
 
 function CarritoProductos() {
 
-    const displaData =[ JSON.parse(localStorage.getItem("carrito"))];
-    //const displaData = carritoCompras;
-    var totalVentas = displaData.reduce((sum, value) => (value.precio ? sum + value.precio : sum), "");
+    const displaData = JSON.parse(localStorage.getItem("carrito"));
+    
+    var totalVentas = displaData.reduce((sum, value) => (value.precio ? sum + parseInt(value.precio) : sum), 0);
+    
     return (
 
         <div className="contenedor">

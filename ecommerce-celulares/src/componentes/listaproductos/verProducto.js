@@ -3,26 +3,22 @@ import Boton from '../botones/boton';
 
 
 function VerProducto() {
-  
-  const seleccion=JSON.parse(localStorage.getItem("seleccion"))
+
+  const seleccion = JSON.parse(localStorage.getItem("seleccion"))
+
 
   const adicionarCarrito = () => {
-    
-    if (localStorage.getItem("carrito") == null) {
-      localStorage.setItem("carrito", JSON.stringify(seleccion))
-    }
-    else {
-      const productoSeleccionados =JSON.parse(localStorage.getItem("carrito"))
-      productoSeleccionados.push(seleccion)
-      localStorage.setItem("carrito", JSON.stringify(productoSeleccionados))
-    }
+
+    var productoSeleccionados = JSON.parse(localStorage.getItem("carrito"));
+    productoSeleccionados.push(seleccion)
+    localStorage.setItem("carrito", JSON.stringify(productoSeleccionados))
 
   }
   return (
     <div className="product-content">
       <div className="content-img">
         <img src={seleccion.img}
-        alt="img-producto">
+          alt="img-producto">
         </img>
       </div>
       <div className="content-desc">
