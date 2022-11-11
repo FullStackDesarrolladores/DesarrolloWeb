@@ -5,8 +5,8 @@ const path = require("path");
 const productosService = require("./productosService.js")
 
 const app = express()
-const port = 8081;//puerto unico de api
-const pathname = "/productos"
+const port = 8082;//puerto unico de api
+const pathname = "/productos-admin"
 
 app.use(cors(), body_parser.json())
 
@@ -31,11 +31,23 @@ app.get(pathname + "/id",
 app.post(pathname,
 	(req, res) => {
 		productosService.productosSet(req.body);
-		res.send({ "mensaje": "Se agregó a carrito de manera Exitosa" })
+		res.send({ "mensaje": "Guardado Exitoso" })
 	}
 )
 
-
+app.patch(pathname,
+	(req, res) => {
+		productosService.productosPatch(req.body);
+		res.send({ "mensaje": "Editado Exitoso" })
+	}
+)
+app.delete(pathname,
+	(req, res) => {
+		console.log(req.body.id)
+		productosService.productosDelete(req.body.id);
+		res.send({ "mensaje": "Borrado Exitoso" })
+	}
+)
 
 
 
