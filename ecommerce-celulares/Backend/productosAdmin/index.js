@@ -37,8 +37,8 @@ app.post(pathname,
 
 app.patch(pathname,
 	(req, res) => {
-		productosService.productosPatch(req.body);
-		res.send({ "mensaje": "Editado Exitoso" })
+		
+		res.send(productosService.productosPatch(req.body))
 	}
 )
 app.delete(pathname,

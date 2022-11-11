@@ -28,10 +28,11 @@ app.get(pathname + "/id",
 	}
 )
 
-app.post(pathname,
-	(req, res) => {
+app.post( pathname,
+	async (req, res) => {
 		productosService.productosSet(req.body);
-		res.send({ "mensaje": "Se agregó a carrito de manera Exitosa" })
+		res.send("Se agregó al carrito")
+
 	}
 )
 

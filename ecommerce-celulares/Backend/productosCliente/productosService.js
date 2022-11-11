@@ -9,41 +9,39 @@ const productosgetid = (id) => {
     return productos.find((producto)=>(producto.id === id))
 }
 
-const productoset= (producto) => {
-    productos.push(producto);
-    return productos;
-}
 const productosset = async (producto) => {
 
-    const producto= request.patch(
-        "http://localhost:8082//productos-admin",restarStoke(producto)
+    const prod= request.patch(
+        "http:/localhost:8082/productos-admin",restarStoke(producto)
     )
    /* const carrito = request.post(
         "http://localhost:####/carrito",producto
     )*/
 
-    await request.all([producto])
+    await request.all([prod])
         .then(
             (res) => {
-                producto.stoke = restarStoke(res[0].data);
+                console.log("respuesta de request")
+                console.log(res[0].data)
+                return res[0].data;
             }
         )
         .catch(
-            (err)=>{
-                console.log(err)
+            ()=>{
+                console.log("fallo la peticion")
             }
         )
 
-    reservas.push(reserva);
-    return reservas;
 }
 
 function restarStoke(producto){
-    producto[stoke]-=1;
-    console.log(producto)
-    return producto;
+    
+    let productoAModificar = productos.find((item) => (producto.id === item.id));
+
+        productoAModificar["stoke"] -= 1;
+     
+    return productoAModificar;
 }
 module.exports.productosGet = productosget;
 module.exports.productosGetId = productosgetid;
 module.exports.productosSet = productosset;
-module.exports.productosDelete = productosdelete;

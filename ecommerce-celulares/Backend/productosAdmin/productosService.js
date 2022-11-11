@@ -20,7 +20,7 @@ const productospatch = (modificacion) => {
         productoAModificar[key] = modificacion[key]
       })
       console.log( productoAModificar )
-    return productos;
+    return productoAModificar;
 }
 const productosdelete = (id) => {
     productos = productos.filter((producto) => { return producto.id !== id });
