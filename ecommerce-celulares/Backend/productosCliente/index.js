@@ -17,14 +17,14 @@ app.listen(port,
 
 
 app.get(pathname,
-	(req, res) => {
-		res.send(productosService.productosGet())
+	async (req, res) => {
+		res.send(await productosService.productosGet())
 	}
 )
 
 app.get(pathname + "/id",
-	(req, res) => {
-		res.send(productosService.productosGetId(req.query.id))
+	async (req, res) => {
+		res.send(await productosService.productoGetId(req.query.id))
 	}
 )
 

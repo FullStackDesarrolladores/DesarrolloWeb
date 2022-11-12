@@ -17,14 +17,14 @@ app.listen(port,
 
 
 app.get(pathname,
-	(req, res) => {
-		res.send(productosService.productosGet())
+	async (req, res) => {
+		res.send(await productosService.productosGet())
 	}
 )
 
 app.get(pathname + "/id",
-	(req, res) => {
-		res.send(productosService.productosGetId(req.query.id))
+	async (req, res) => {
+		res.send(await productosService.productosGetId(req.query.id))
 	}
 )
 
@@ -36,16 +36,13 @@ app.post(pathname,
 )
 
 app.patch(pathname,
-	(req, res) => {
-		
-		res.send(productosService.productosPatch(req.body))
+	async (req, res) => {
+		res.send(await productosService.productosPatch(req.body))
 	}
 )
 app.delete(pathname,
-	(req, res) => {
-		console.log(req.body.id)
-		productosService.productosDelete(req.body.id);
-		res.send({ "mensaje": "Borrado Exitoso" })
+	async (req, res) => {
+		res.send(await productosService.productosDelete(req.body))
 	}
 )
 
