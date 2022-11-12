@@ -55,7 +55,7 @@ const productosset = async (producto) => {
                 const { collection, client } = await getConnection();
 
                 await collection.insertMany([prod])
-            
+
                 await getMongo.closeclient(client);
 
             }
@@ -73,18 +73,37 @@ const productosset = async (producto) => {
 const productospatch = async (productoEnviado) => {
 
     let id = productoEnviado._id;
+
+    let marca = await productosgetid(id)
+
     let tagsModificados = null;
 
     await modificarProducto(productoEnviado)
         .then((res) => {
             tagsModificados = res;
         });
+    
+    const cliente = request.patch(
+        "http:/localhost:8081/productos", {nuevo:tagsModificados,viejo:marca}
+    )
+    await request.all([cliente])
+        .then(
+            async () => {
 
-    const { collection, client } = await getConnection();
+                const { collection, client } = await getConnection();
 
-    await collection.updateOne({ "_id": ObjectId(id) }, { $set: tagsModificados });
+                await collection.updateOne({ "_id": ObjectId(id) }, { $set: tagsModificados });
 
-    await getMongo.closeclient(client);
+                await getMongo.closeclient(client);
+
+            }
+        )
+        .catch(
+            () => {
+                console.log("fallo la peticion post en producto cliente")
+            }
+        )
+
 
     return await productosgetid(id);
 }
@@ -94,7 +113,7 @@ const productosdelete = async (productoEliminar) => {
     var prodDel = await productosgetid(productoEliminar._id);
 
     const cliente = request.delete(
-        "http:/localhost:8081/productos", {data:prodDel}
+        "http:/localhost:8081/productos", { data: prodDel }
     )
     await request.all([cliente])
         .then(
@@ -103,7 +122,7 @@ const productosdelete = async (productoEliminar) => {
                 const { collection, client } = await getConnection();
 
                 await collection.deleteOne({ "_id": ObjectId(productoEliminar._id) });
-            
+
                 await getMongo.closeclient(client);
 
             }

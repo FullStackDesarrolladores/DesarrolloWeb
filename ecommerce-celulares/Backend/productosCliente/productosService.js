@@ -1,7 +1,7 @@
 const getMongo = require("./mongodb.js")
 let request = require("axios")
 const nameDb = "Tienda-certificacion";
-const  ObjectId =require("mongodb").ObjectId
+const ObjectId = require("mongodb").ObjectId
 
 const productosget = async () => {
 
@@ -34,7 +34,7 @@ const productogetid = async (id) => {
         )
 
     await getMongo.closeclient(client);
-    
+
     return productoEncontrado
 }
 
@@ -56,7 +56,7 @@ const productogetmarca = async (marca) => {
         )
 
     await getMongo.closeclient(client);
-    
+
     return productoEncontrado
 }
 
@@ -79,7 +79,7 @@ const productocomprado = async (productoEnviado) => {
                 console.log("fallo la peticion post en producto cliente")
             }
         )
-             
+
 }
 
 const productosset = async (producto) => {
@@ -95,32 +95,33 @@ const productosset = async (producto) => {
 
 const productospatch = async (productoEnviado) => {
 
-    let id = productoEnviado._id;
-    let tagsModificados = null;
-
-    await modificarProducto(productoEnviado)
-        .then((res) => {
-            tagsModificados = res;
-        });
+    let producto = await productogetmarca(productoEnviado.viejo.marca);
+    let id = producto._id;
 
     const { collection, client } = await getConnection();
 
-    await collection.updateOne({ "_id": ObjectId(id) }, { $set: tagsModificados });
+    await collection.updateOne({ "_id": ObjectId(id) }, { $set: productoEnviado.nuevo });
 
     await getMongo.closeclient(client);
 
-    return await productosgetid(id);
+    return await productogetid(id);
 }
 
 const productosdelete = async (productoEliminar) => {
-
+    
     let producto = await productogetmarca(productoEliminar.marca);
-  
+
     const { collection, client } = await getConnection();
+    try {
+        await collection.deleteOne({ "_id": producto._id });
 
-    await collection.deleteOne({ "_id":producto._id });
+    } catch (error) {
+        
+    }finally{
 
-    await getMongo.closeclient(client);
+    }
+   
+    
 
     return "Borrado exitoso en microservicio cliente";
 }
@@ -129,7 +130,7 @@ async function restarStoke(producto) {
 
     const { collection, client } = await getConnection();
 
-    await collection.updateOne({ "_id": new ObjectId(producto) }, {$inc:{"stoke":-1}});
+    await collection.updateOne({ "_id": new ObjectId(producto) }, { $inc: { "stoke": -1 } });
 
     await getMongo.closeclient(client);
 

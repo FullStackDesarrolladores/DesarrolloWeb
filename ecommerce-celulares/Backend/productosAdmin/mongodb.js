@@ -9,7 +9,7 @@ const getClient = async (nombreBd) => {
 
   await client.connect().then(
     (db) => {
-      console.log("conexion de cliente exitosa a mongo db")
+      console.log(" ")
 
     }
   ).catch(
