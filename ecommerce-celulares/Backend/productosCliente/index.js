@@ -17,25 +17,36 @@ app.listen(port,
 
 
 app.get(pathname,
-	(req, res) => {
-		res.send(productosService.productosGet())
+	async (req, res) => {
+		res.send(await productosService.productosGet())
 	}
 )
 
 app.get(pathname + "/id",
-	(req, res) => {
-		res.send(productosService.productosGetId(req.query.id))
+	async (req, res) => {
+		res.send(await productosService.productoGetId(req.query.id))
 	}
 )
 
-app.post(pathname,
-	(req, res) => {
-		productosService.productosSet(req.body);
-		res.send({ "mensaje": "Se agregó a carrito de manera Exitosa" })
+app.post( pathname,
+	async (req, res) => {
+
+		res.send(await productosService.productosSet(req.body))
+
 	}
 )
 
+app.patch(pathname,
+	async (req, res) => {
+		res.send(await productosService.productosPatch(req.body))
+	}
+)
 
+app.delete(pathname,
+	async (req, res) => {
+		res.send(await productosService.productosDelete(req.body))
+	}
+)
 
 
 

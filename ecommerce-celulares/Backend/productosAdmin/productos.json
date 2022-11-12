@@ -1,6 +1,6 @@
 [
   {
-    "id":1,
+ 
     "img": "https://www.demoblaze.com/imgs/galaxy_s6.jpg",
     "marca":"Samsung",
     "modelo":"galaxy s6",
@@ -9,7 +9,7 @@
     "stoke":100
   },
   {
-    "id":2,
+
     "img": "https://www.demoblaze.com/imgs/Lumia_1520.jpg",
     "marca":"Nokia",
     "modelo":"lumia 1520",
@@ -18,7 +18,7 @@
     "stoke":100
   },
   {
-    "id":3,
+
     "img": "https://www.demoblaze.com/imgs/Nexus_6.jpg",
     "marca":"Motorola",
     "modelo":"Nexus 6",
@@ -27,7 +27,7 @@
     "stoke":100
   },
   {
-    "id":4,
+
     "img": "https://www.demoblaze.com/imgs/iphone_6.jpg",
     "marca":"Iphone",
     "modelo":"6 32gb",
