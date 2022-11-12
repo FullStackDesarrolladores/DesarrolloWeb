@@ -30,13 +30,23 @@ app.get(pathname + "/id",
 
 app.post( pathname,
 	async (req, res) => {
-		productosService.productosSet(req.body);
-		res.send("Se agregó al carrito")
+
+		res.send(await productosService.productosSet(req.body))
 
 	}
 )
 
+app.patch(pathname,
+	async (req, res) => {
+		res.send(await productosService.productosPatch(req.body))
+	}
+)
 
+app.delete(pathname,
+	async (req, res) => {
+		res.send(await productosService.productosDelete(req.body))
+	}
+)
 
 
 

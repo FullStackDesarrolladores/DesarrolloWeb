@@ -1,6 +1,7 @@
 const getMongo = require("./mongodb.js")
 const ObjectId = require("mongodb").ObjectId
 const nameDb = "Tienda-certificacion";
+let request = require("axios")
 
 const productosget = async () => {
 
@@ -34,42 +35,84 @@ const productosgetid = async (id) => {
 
     await getMongo.closeclient(client);
 
+
     return productoEncontrado
 }
 
 const productosset = async (producto) => {
 
-    const { collection, client } = await getConnection();
+    const cliente = request.post(
+        "http:/localhost:8081/productos", producto
+    )
+    await request.all([cliente])
+        .then(
+            async (res) => {
 
-    await collection.insertMany([producto])
+                let prod = res[0].data;
 
-    await getMongo.closeclient(client);
+                delete prod._id;
 
-    return await productosget();
+                const { collection, client } = await getConnection();
+
+                await collection.insertMany([prod])
+            
+                await getMongo.closeclient(client);
+
+            }
+        )
+        .catch(
+            () => {
+                console.log("fallo la peticion post en microservicio admin")
+            }
+        )
+
+
+    return "Guardado: Exitoso";
 }
 
 const productospatch = async (productoEnviado) => {
 
-    let productoAModificar = await productosgetid(productoEnviado._id)
+    let id = productoEnviado._id;
+    let tagsModificados = null;
 
-    productoAModificar = await modificarProducto(productoEnviado, productoAModificar);
+    await modificarProducto(productoEnviado)
+        .then((res) => {
+            tagsModificados = res;
+        });
 
     const { collection, client } = await getConnection();
 
-    await collection.replaceOne({ "_id": productoAModificar._id }, productoAModificar);
+    await collection.updateOne({ "_id": ObjectId(id) }, { $set: tagsModificados });
 
     await getMongo.closeclient(client);
 
-    return await productosget();
+    return await productosgetid(id);
 }
 
 const productosdelete = async (productoEliminar) => {
 
-    const { collection, client } = await getConnection();
+    var prodDel = await productosgetid(productoEliminar._id);
 
-    await collection.remove({ "_id": ObjectId(productoEliminar._id) });
+    const cliente = request.delete(
+        "http:/localhost:8081/productos", {data:prodDel}
+    )
+    await request.all([cliente])
+        .then(
+            async () => {
 
-    await getMongo.closeclient(client);
+                const { collection, client } = await getConnection();
+
+                await collection.deleteOne({ "_id": ObjectId(productoEliminar._id) });
+            
+                await getMongo.closeclient(client);
+
+            }
+        )
+        .catch(
+            () => {
+                console.log("fallo la peticion post en producto cliente")
+            }
+        )
 
     return await productosget();
 }
@@ -83,18 +126,13 @@ async function getConnection() {
     return { collection, client };
 }
 
-async function modificarProducto(productoEnviado, productoAModificar) {
+async function modificarProducto(productoEnviado) {
 
-    Object.keys(productoEnviado).forEach(function (key) {
+    let producto = productoEnviado;
 
-        if (key !== "_id") {
+    delete producto._id;
 
-            productoAModificar[key] = productoEnviado[key]
-
-        }
-
-    })
-    return await productoAModificar;
+    return producto;
 }
 
 module.exports.productosGet = productosget;
@@ -102,3 +140,4 @@ module.exports.productosGetId = productosgetid;
 module.exports.productosSet = productosset;
 module.exports.productosDelete = productosdelete;
 module.exports.productosPatch = productospatch;
+

@@ -29,9 +29,8 @@ app.get(pathname + "/id",
 )
 
 app.post(pathname,
-	(req, res) => {
-		productosService.productosSet(req.body);
-		res.send({ "mensaje": "Guardado Exitoso" })
+	async (req, res) => {
+		res.send(await productosService.productosSet(req.body))
 	}
 )
 
