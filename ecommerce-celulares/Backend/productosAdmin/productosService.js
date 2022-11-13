@@ -39,6 +39,31 @@ const productosgetid = async (id) => {
     return productoEncontrado
 }
 
+const productosgetref = async (ref) => {
+
+    let productoEncontrado = null
+
+    const { collection, client } = await getConnection();
+
+    await collection.findOne({ "ref": ref })
+
+        .then((res) => {
+
+            productoEncontrado = res;
+
+        }
+        ).catch(
+            () => {
+                console.log("no se encontró elemento")
+            }
+        )
+
+    await getMongo.closeclient(client);
+
+
+    return productoEncontrado
+}
+
 const productosset = async (producto) => {
 
     const cliente = request.post(
@@ -50,8 +75,10 @@ const productosset = async (producto) => {
 
                 let prod = res[0].data;
 
+                prod.ref=res[0].data._id;
+                
                 delete prod._id;
-
+ 
                 const { collection, client } = await getConnection();
 
                 await collection.insertMany([prod])
@@ -74,7 +101,7 @@ const productospatch = async (productoEnviado) => {
 
     let id = productoEnviado._id;
 
-    let marca = await productosgetid(id)
+    let productoAModificar = await productosgetid(id)
 
     let tagsModificados = null;
 
@@ -84,7 +111,7 @@ const productospatch = async (productoEnviado) => {
         });
     
     const cliente = request.patch(
-        "http:/localhost:8081/productos", {nuevo:tagsModificados,viejo:marca}
+        "http:/localhost:8081/productos", {tags:tagsModificados,id:productoAModificar.ref}
     )
     await request.all([cliente])
         .then(
@@ -110,7 +137,7 @@ const productospatch = async (productoEnviado) => {
 
 const productosdelete = async (productoEliminar) => {
 
-    var prodDel = await productosgetid(productoEliminar._id);
+    var prodDel = await productosgetid(productoEliminar.ref);
 
     const cliente = request.delete(
         "http:/localhost:8081/productos", { data: prodDel }
@@ -134,6 +161,16 @@ const productosdelete = async (productoEliminar) => {
         )
 
     return await productosget();
+}
+
+
+async function modificarProducto(productoEnviado) {
+
+    let producto = productoEnviado;
+
+    delete producto._id;
+
+    return producto;
 }
 
 async function getConnection() {

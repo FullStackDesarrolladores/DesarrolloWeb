@@ -38,50 +38,6 @@ const productogetid = async (id) => {
     return productoEncontrado
 }
 
-const productogetmarca = async (marca) => {
-
-    let productoEncontrado = null
-
-    const { collection, client } = await getConnection();
-
-    await collection.findOne({ "marca": marca })
-
-        .then((res) => {
-            productoEncontrado = res;
-        }
-        ).catch(
-            () => {
-                console.log("no se encontró elemento")
-            }
-        )
-
-    await getMongo.closeclient(client);
-
-    return productoEncontrado
-}
-
-
-const productocomprado = async (productoEnviado) => {
-
-    let productoAModificar = await restarStoke(productoEnviado._id);
-
-    const prod = request.patch(
-        "http:/localhost:8082/productos-admin", productoAModificar
-    )
-    await request.all([prod])
-        .then(
-            (res) => {
-                return res;
-            }
-        )
-        .catch(
-            () => {
-                console.log("fallo la peticion post en producto cliente")
-            }
-        )
-
-}
-
 const productosset = async (producto) => {
 
     const { collection, client } = await getConnection();
@@ -95,49 +51,46 @@ const productosset = async (producto) => {
 
 const productospatch = async (productoEnviado) => {
 
-    let producto = await productogetmarca(productoEnviado.viejo.marca);
-    let id = producto._id;
+    let producto = await productogetid(productoEnviado.id);
 
     const { collection, client } = await getConnection();
 
-    await collection.updateOne({ "_id": ObjectId(id) }, { $set: productoEnviado.nuevo });
+    await collection.updateOne({ "_id": ObjectId(producto._id) }, { $set: productoEnviado.tags });
 
     await getMongo.closeclient(client);
 
-    return await productogetid(id);
+    return await productogetid(producto._id);
 }
 
 const productosdelete = async (productoEliminar) => {
-    
-    let producto = await productogetmarca(productoEliminar.marca);
-
-    const { collection, client } = await getConnection();
-    try {
-        await collection.deleteOne({ "_id": producto._id });
-
-    } catch (error) {
-        
-    }finally{
-
-    }
    
-    
-
-    return "Borrado exitoso en microservicio cliente";
-}
-
-async function restarStoke(producto) {
-
     const { collection, client } = await getConnection();
 
-    await collection.updateOne({ "_id": new ObjectId(producto) }, { $inc: { "stoke": -1 } });
+    await collection.deleteOne({ "_id":  ObjectId(productoEliminar.ref) });
 
     await getMongo.closeclient(client);
 
-    return await productogetid(producto);
+    return "Borrado exitoso en microservicio cliente";
 }
-
-
+async function addToCar(producto){
+    
+    console.log(producto)
+    
+    const prod = request.post(
+        "http:/localhost:3000/carrito", producto
+    )
+    await request.all([prod])
+        .then(
+            () => {
+                return "se añadió al carrito exitosamente";
+            }
+        )
+        .catch(
+            () => {
+                console.log("No se pudo agregar a carrito")
+            }
+        )
+}
 async function getConnection() {
 
     const client = await getMongo.Client(nameDb);
@@ -147,18 +100,11 @@ async function getConnection() {
     return { collection, client };
 }
 
-async function modificarProducto(productoEnviado) {
 
-    let producto = productoEnviado;
-
-    delete producto._id;
-
-    return producto;
-}
 
 module.exports.productosGet = productosget;
 module.exports.productosSet = productosset;
 module.exports.productoGetId = productogetid;
-module.exports.productosComprado = productocomprado;
 module.exports.productosPatch = productospatch;
 module.exports.productosDelete = productosdelete;
+module.exports.addCar = addToCar;
