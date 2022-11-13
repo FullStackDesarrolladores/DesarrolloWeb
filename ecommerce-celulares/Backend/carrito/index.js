@@ -4,10 +4,12 @@ const body_parser = require("body-parser");
 const path = require("path");
 const carritoService = require("./carritoServices.js")
 
-app.use(cors(), body_parser.json())
+
 const app = express();
 const port = 3000;//puerto unico de api
 const pathname = "/carrito"
+
+app.use(cors(), body_parser.json())
 
 app.listen(port, () => {
     console.log("Servidor corriendo en el puerto "+port);

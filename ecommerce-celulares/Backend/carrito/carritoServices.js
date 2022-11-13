@@ -14,13 +14,13 @@ const carritoget = async () => {
     return carritoBd;
 }
 
-const carritogetid = async (id) => {
+const carritogetref = async (ref) => {
 
-    let productoEncontrado = null
+    let productoEncontrado = null;
 
     const { collection, client } = await getConnection();
 
-    await collection.findOne({ "_id": new ObjectId(id) })
+    await collection.findOne({ "ref": ref })
 
         .then((res) => {
 
@@ -29,7 +29,7 @@ const carritogetid = async (id) => {
         }
         ).catch(
             () => {
-                console.log("no se encontró elemento")
+                console.log("no se encontró elemento en carrito")
             }
         )
 
@@ -40,98 +40,50 @@ const carritogetid = async (id) => {
 }
 
 const carritoset = async (producto) => {
+    console.log(producto)
+    console.log(await carritogetref(producto._id))
+    if(await carritogetref(producto._id)!= null){
+        await carritopatch(producto._id)
+    }else{
 
-    const cliente = request.post(
-        "http:/localhost:8081/carrito", producto
-    )
-    await request.all([cliente])
-        .then(
-            async (res) => {
+        let prodInCar = producto;
 
-                let prod = res[0].data;
+        prodInCar.cantidad=1;
 
-                delete prod._id;
+        prodInCar.ref=producto._id;
 
-                const { collection, client } = await getConnection();
+        delete prodInCar._id;
 
-                await collection.insertMany([prod])
+        console.log(prodInCar)
 
-                await getMongo.closeclient(client);
+        const { collection, client } = await getConnection();
 
-            }
-        )
-        .catch(
-            () => {
-                console.log("fallo la peticion post en microservicio admin")
-            }
-        )
+        await collection.insertMany([prodInCar])
+    
+        await getMongo.closeclient(client);
+    }
 
-
-    return "Guardado: Exitoso";
+    return await carritoget();
 }
 
-const carritopatch = async (productoEnviado) => {
+const carritopatch = async (referencia) => {
 
-    let id = productoEnviado._id;
+    const { collection, client } = await getConnection();
 
-    let marca = await carritogetid(id)
+    await collection.updateOne({ "ref": referencia }, { $inc: { "cantidad": 1 } });
 
-    let tagsModificados = null;
+    await getMongo.closeclient(client);
 
-    await modificarProducto(productoEnviado)
-        .then((res) => {
-            tagsModificados = res;
-        });
-    
-    const cliente = request.patch(
-        "http:/localhost:8081/carrito", {nuevo:tagsModificados,viejo:marca}
-    )
-    await request.all([cliente])
-        .then(
-            async () => {
-
-                const { collection, client } = await getConnection();
-
-                await collection.updateOne({ "_id": ObjectId(id) }, { $set: tagsModificados });
-
-                await getMongo.closeclient(client);
-
-            }
-        )
-        .catch(
-            () => {
-                console.log("fallo la peticion post en producto cliente")
-            }
-        )
-
-
-    return await carritogetid(id);
+    return await carritoget();
 }
 
 const carritodelete = async (productoEliminar) => {
 
-    var prodDel = await carritogetid(productoEliminar._id);
+    const { collection, client } = await getConnection();
 
-    const cliente = request.delete(
-        "http:/localhost:8081/carrito", { data: prodDel }
-    )
-    await request.all([cliente])
-        .then(
-            async () => {
+    await collection.deleteOne({ "ref":  ObjectId(productoEliminar.ref) });
 
-                const { collection, client } = await getConnection();
-
-                await collection.deleteOne({ "_id": ObjectId(productoEliminar._id) });
-
-                await getMongo.closeclient(client);
-
-            }
-        )
-        .catch(
-            () => {
-                console.log("fallo la peticion post en producto cliente")
-            }
-        )
+    await getMongo.closeclient(client);
 
     return await carritoget();
 }
@@ -155,7 +107,6 @@ async function modificarProducto(productoEnviado) {
 }
 
 module.exports.carritoGet = carritoget;
-module.exports.carritoGetId = carritogetid;
 module.exports.carritoSet = carritoset;
 module.exports.carritoDelete = carritodelete;
 module.exports.carritoPatch = carritopatch;

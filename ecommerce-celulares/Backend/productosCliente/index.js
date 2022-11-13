@@ -36,6 +36,12 @@ app.post( pathname,
 	}
 )
 
+app.post( pathname+"/addToCar",
+	async (req, res) => {
+		res.send(await productosService.addCar(req.body))
+	}
+)
+
 app.patch(pathname,
 	async (req, res) => {
 		res.send(await productosService.productosPatch(req.body))

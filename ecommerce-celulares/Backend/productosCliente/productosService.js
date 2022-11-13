@@ -51,8 +51,6 @@ const productosset = async (producto) => {
 
 const productospatch = async (productoEnviado) => {
 
-    console.log(productoEnviado.id)
-
     let producto = await productogetid(productoEnviado.id);
 
     const { collection, client } = await getConnection();
@@ -74,7 +72,25 @@ const productosdelete = async (productoEliminar) => {
 
     return "Borrado exitoso en microservicio cliente";
 }
-
+async function addToCar(producto){
+    
+    console.log(producto)
+    
+    const prod = request.post(
+        "http:/localhost:3000/carrito", producto
+    )
+    await request.all([prod])
+        .then(
+            () => {
+                return "se añadió al carrito exitosamente";
+            }
+        )
+        .catch(
+            () => {
+                console.log("No se pudo agregar a carrito")
+            }
+        )
+}
 async function getConnection() {
 
     const client = await getMongo.Client(nameDb);
@@ -91,3 +107,4 @@ module.exports.productosSet = productosset;
 module.exports.productoGetId = productogetid;
 module.exports.productosPatch = productospatch;
 module.exports.productosDelete = productosdelete;
+module.exports.addCar = addToCar;

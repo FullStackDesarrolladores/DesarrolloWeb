@@ -39,6 +39,31 @@ const productosgetid = async (id) => {
     return productoEncontrado
 }
 
+const productosgetref = async (ref) => {
+
+    let productoEncontrado = null
+
+    const { collection, client } = await getConnection();
+
+    await collection.findOne({ "ref": ref })
+
+        .then((res) => {
+
+            productoEncontrado = res;
+
+        }
+        ).catch(
+            () => {
+                console.log("no se encontró elemento")
+            }
+        )
+
+    await getMongo.closeclient(client);
+
+
+    return productoEncontrado
+}
+
 const productosset = async (producto) => {
 
     const cliente = request.post(
@@ -112,7 +137,7 @@ const productospatch = async (productoEnviado) => {
 
 const productosdelete = async (productoEliminar) => {
 
-    var prodDel = await productosgetid(productoEliminar._id);
+    var prodDel = await productosgetid(productoEliminar.ref);
 
     const cliente = request.delete(
         "http:/localhost:8081/productos", { data: prodDel }
@@ -138,37 +163,6 @@ const productosdelete = async (productoEliminar) => {
     return await productosget();
 }
 
-const productocomprado = async (productoEnviado) => {
-
-    let productoAModificar = await restarStoke(productoEnviado._id);
-
-    const prod = request.patch(
-        "http:/localhost:8082/productos", productoAModificar
-    )
-    await request.all([prod])
-        .then(
-            (res) => {
-                return res;
-            }
-        )
-        .catch(
-            () => {
-                console.log("fallo la peticion post en producto cliente")
-            }
-        )
-
-}
-
-async function restarStoke(producto) {
-
-    const { collection, client } = await getConnection();
-
-    await collection.updateOne({ "_id": new ObjectId(producto) }, { $inc: { "stoke": -1 } });
-
-    await getMongo.closeclient(client);
-
-    return await productosgetid(producto);
-}
 
 async function modificarProducto(productoEnviado) {
 
