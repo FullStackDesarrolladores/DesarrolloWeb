@@ -3,18 +3,18 @@ const ObjectId = require("mongodb").ObjectId
 const nameDb = "Tienda-certificacion";
 let request = require("axios")
 
-const productosget = async () => {
+const carritoget = async () => {
 
     const { collection, client } = await getConnection();
 
-    const productosBd = await collection.find({}).toArray();
+    const carritoBd = await collection.find({}).toArray();
 
     await getMongo.closeclient(client);
 
-    return productosBd;
+    return carritoBd;
 }
 
-const productosgetid = async (id) => {
+const carritogetid = async (id) => {
 
     let productoEncontrado = null
 
@@ -39,10 +39,10 @@ const productosgetid = async (id) => {
     return productoEncontrado
 }
 
-const productosset = async (producto) => {
+const carritoset = async (producto) => {
 
     const cliente = request.post(
-        "http:/localhost:8081/productos", producto
+        "http:/localhost:8081/carrito", producto
     )
     await request.all([cliente])
         .then(
@@ -50,10 +50,8 @@ const productosset = async (producto) => {
 
                 let prod = res[0].data;
 
-                prod.ref=res[0].data._id;
-                
                 delete prod._id;
- 
+
                 const { collection, client } = await getConnection();
 
                 await collection.insertMany([prod])
@@ -72,11 +70,11 @@ const productosset = async (producto) => {
     return "Guardado: Exitoso";
 }
 
-const productospatch = async (productoEnviado) => {
+const carritopatch = async (productoEnviado) => {
 
     let id = productoEnviado._id;
 
-    let productoAModificar = await productosgetid(id)
+    let marca = await carritogetid(id)
 
     let tagsModificados = null;
 
@@ -86,7 +84,7 @@ const productospatch = async (productoEnviado) => {
         });
     
     const cliente = request.patch(
-        "http:/localhost:8081/productos", {tags:tagsModificados,id:productoAModificar.ref}
+        "http:/localhost:8081/carrito", {nuevo:tagsModificados,viejo:marca}
     )
     await request.all([cliente])
         .then(
@@ -107,15 +105,15 @@ const productospatch = async (productoEnviado) => {
         )
 
 
-    return await productosgetid(id);
+    return await carritogetid(id);
 }
 
-const productosdelete = async (productoEliminar) => {
+const carritodelete = async (productoEliminar) => {
 
-    var prodDel = await productosgetid(productoEliminar._id);
+    var prodDel = await carritogetid(productoEliminar._id);
 
     const cliente = request.delete(
-        "http:/localhost:8081/productos", { data: prodDel }
+        "http:/localhost:8081/carrito", { data: prodDel }
     )
     await request.all([cliente])
         .then(
@@ -135,48 +133,7 @@ const productosdelete = async (productoEliminar) => {
             }
         )
 
-    return await productosget();
-}
-
-const productocomprado = async (productoEnviado) => {
-
-    let productoAModificar = await restarStoke(productoEnviado._id);
-
-    const prod = request.patch(
-        "http:/localhost:8082/productos", productoAModificar
-    )
-    await request.all([prod])
-        .then(
-            (res) => {
-                return res;
-            }
-        )
-        .catch(
-            () => {
-                console.log("fallo la peticion post en producto cliente")
-            }
-        )
-
-}
-
-async function restarStoke(producto) {
-
-    const { collection, client } = await getConnection();
-
-    await collection.updateOne({ "_id": new ObjectId(producto) }, { $inc: { "stoke": -1 } });
-
-    await getMongo.closeclient(client);
-
-    return await productosgetid(producto);
-}
-
-async function modificarProducto(productoEnviado) {
-
-    let producto = productoEnviado;
-
-    delete producto._id;
-
-    return producto;
+    return await carritoget();
 }
 
 async function getConnection() {
@@ -197,9 +154,9 @@ async function modificarProducto(productoEnviado) {
     return producto;
 }
 
-module.exports.productosGet = productosget;
-module.exports.productosGetId = productosgetid;
-module.exports.productosSet = productosset;
-module.exports.productosDelete = productosdelete;
-module.exports.productosPatch = productospatch;
+module.exports.carritoGet = carritoget;
+module.exports.carritoGetId = carritogetid;
+module.exports.carritoSet = carritoset;
+module.exports.carritoDelete = carritodelete;
+module.exports.carritoPatch = carritopatch;
 
