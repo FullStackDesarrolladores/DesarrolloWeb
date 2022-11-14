@@ -1,21 +1,16 @@
 import './producto.css';
 import Boton from '../botones/boton';
 
+
 function Producto(props) {
 
-  const productos = JSON.parse(localStorage.getItem("productos"))
 
   const verproducto = () => {
-    const productoSeleccionado = productos.find(element => {
-      return element.id === props.id;
-    });
-    if (localStorage.getItem("seleccion") == null) {
-      localStorage.setItem("seleccion", JSON.stringify(productoSeleccionado))
-    }
-    else {
-      localStorage.setItem("seleccion", JSON.stringify(productoSeleccionado))
-    }
+
+    localStorage.setItem("seleccion", props.id)
+
   }
+
 
   return (
     <div id="card-product">
@@ -31,7 +26,7 @@ function Producto(props) {
         </div>
       </div>
       <div className='cont-btn'>
-        <Boton nombre='Comprar' click={() => verproducto()} />
+        <Boton url="/ver" nombre='Comprar' click={() => verproducto()} />
       </div>
 
     </div>

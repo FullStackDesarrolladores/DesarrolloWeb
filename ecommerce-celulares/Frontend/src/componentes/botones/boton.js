@@ -4,7 +4,7 @@ function Boton(props) {
   
   return (
     <div className="elc">
-      <a href='/ver' onClick={props.click}>{props.nombre}</a>
+      <a href={props.url} onClick={props.click}>{props.nombre}</a>
     </div>
 
 

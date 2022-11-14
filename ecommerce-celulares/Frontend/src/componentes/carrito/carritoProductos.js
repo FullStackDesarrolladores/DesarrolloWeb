@@ -1,13 +1,37 @@
 import './ventanaCarritoCompras.css'
 import CarritoProducto from './carritoProducto'
-
+import { useState, useEffect } from 'react';
+import Boton from '../botones/boton';
 
 function CarritoProductos() {
 
-    const displaData = JSON.parse(localStorage.getItem("carrito"));
+    const [prodInCar, setProdInCar] = useState([]);
+
+    useEffect(
+        () => {
+            fetch("http://localhost:8085/carrito").
+                then(
+                    (response) => (response.json())
+                )
+                .then(
+                    (response) => {
+                        setProdInCar(response)
+                    }
+                )
+        }
+        , []);
+
+
+    var totalVentas = prodInCar.reduce((sum, value) => (value.precio ? sum + parseInt(value.precio * value.cantidad) : sum), 0);
+
+    const comprar = () => {
     
-    var totalVentas = displaData.reduce((sum, value) => (value.precio ? sum + parseInt(value.precio) : sum), 0);
+    }
+
+    const borrar = () => {
     
+    }
+
     return (
 
         <div className="contenedor">
@@ -31,33 +55,40 @@ function CarritoProductos() {
                                 <th className="carritoMenuTableTd">Valor</th>
                                 <th className="carritoMenuTableTd">Total</th>
                             </tr>
-                            {displaData.map(
+                            {prodInCar.map(
                                 (item, index) => (
+
                                     <CarritoProducto
                                         index={index}
                                         marca={item.marca}
                                         modelo={item.modelo}
                                         img={item.img}
                                         precio={item.precio}
+                                        cantidad={item.cantidad}
                                     />
+
                                 )
                             )
+
                             }
+
                             <tr>
                                 <td></td>
                                 <td></td>
                                 <td className="carritoMenuTableTd">TOTAL</td>
+                                <td className="carritoMenuTableTd"></td>
                                 <td className="carritoMenuTableTd">$ {totalVentas}</td>
                             </tr>
                         </tbody>
                         <div className="carritoBotones">
-                            <button className="carritoBoton" type="button">Finalizar Compra</button>
-                            <button className="carritoBoton" type="button">Cancelar</button>
+                            <Boton url="/" nombre='Finalizar Compra' click={() => comprar()} />
+                            <Boton url="/" nombre='Borrar Carrito' click={() => borrar()} />
                         </div>
+
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
 
 
 
