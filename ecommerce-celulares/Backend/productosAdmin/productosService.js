@@ -75,10 +75,10 @@ const productosset = async (producto) => {
 
                 let prod = res[0].data;
 
-                prod.ref=res[0].data._id;
-                
+                prod.ref = res[0].data._id;
+
                 delete prod._id;
- 
+
                 const { collection, client } = await getConnection();
 
                 await collection.insertMany([prod])
@@ -108,10 +108,11 @@ const productospatch = async (productoEnviado) => {
     await modificarProducto(productoEnviado)
         .then((res) => {
             tagsModificados = res;
+            delete tagsModificados.ref
         });
-    
+  
     const cliente = request.patch(
-        "http:/localhost:8081/productos", {tags:tagsModificados,id:productoAModificar.ref}
+        "http:/localhost:8081/productos", { tags: tagsModificados, id: productoAModificar.ref }
     )
     await request.all([cliente])
         .then(
@@ -137,7 +138,7 @@ const productospatch = async (productoEnviado) => {
 
 const productosdelete = async (productoEliminar) => {
 
-    var prodDel = await productosgetid(productoEliminar.ref);
+    var prodDel = await productosgetid(productoEliminar._id);
 
     const cliente = request.delete(
         "http:/localhost:8081/productos", { data: prodDel }

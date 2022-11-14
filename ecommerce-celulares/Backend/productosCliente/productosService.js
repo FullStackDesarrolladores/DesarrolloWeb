@@ -51,6 +51,8 @@ const productosset = async (producto) => {
 
 const productospatch = async (productoEnviado) => {
 
+    console.log(productoEnviado)
+
     let producto = await productogetid(productoEnviado.id);
 
     const { collection, client } = await getConnection();
@@ -63,7 +65,7 @@ const productospatch = async (productoEnviado) => {
 }
 
 const productosdelete = async (productoEliminar) => {
-   
+
     const { collection, client } = await getConnection();
 
     await collection.deleteOne({ "_id":  ObjectId(productoEliminar.ref) });

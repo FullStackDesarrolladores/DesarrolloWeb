@@ -79,9 +79,11 @@ const carritopatch = async (referencia) => {
 
 const carritodelete = async (productoEliminar) => {
 
+    console.log(productoEliminar.ref)
+
     const { collection, client } = await getConnection();
 
-    await collection.deleteOne({ "ref":  ObjectId(productoEliminar.ref) });
+    await collection.deleteOne({ "ref":  productoEliminar.ref });
 
     await getMongo.closeclient(client);
 
