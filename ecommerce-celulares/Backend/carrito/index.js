@@ -29,7 +29,7 @@ app.post(pathname,
 
 app.delete(pathname,
 	async (req, res) => {
-		res.send(await carritoService.carritoDelete(req.body))
+		res.send(await carritoService.carritoDelete())
 	}
 )
 

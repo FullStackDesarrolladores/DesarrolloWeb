@@ -20,7 +20,7 @@ function App() {
     <BrowserRouter>
       <BarraNavegacion />
       <Routes>
-        <Route path='/productos' element={<Productos />}></Route>
+        <Route path='/' element={<Productos />}></Route>
         <Route path='/ver' element={<VerProducto />}></Route>
         <Route path='/carrito' element={<CarritoProductos />}></Route>
         <Route path='/reporte' element={<ListaVentas />}></Route>

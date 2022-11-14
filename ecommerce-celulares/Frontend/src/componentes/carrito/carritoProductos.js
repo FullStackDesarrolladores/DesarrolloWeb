@@ -25,11 +25,17 @@ function CarritoProductos() {
     var totalVentas = prodInCar.reduce((sum, value) => (value.precio ? sum + parseInt(value.precio * value.cantidad) : sum), 0);
 
     const comprar = () => {
-    
+
     }
 
     const borrar = () => {
-    
+        fetch("http://localhost:8085/carrito",
+            {
+                method: 'DELETE'
+            }
+                
+        ).then(res => res.text()) // 
+        .then(res => console.log(res))
     }
 
     return (
@@ -82,7 +88,7 @@ function CarritoProductos() {
                         </tbody>
                         <div className="carritoBotones">
                             <Boton url="/" nombre='Finalizar Compra' click={() => comprar()} />
-                            <Boton url="/" nombre='Borrar Carrito' click={() => borrar()} />
+                            <Boton url="/carrito" nombre='Borrar Carrito' click={() => borrar()} />
                         </div>
 
                     </div>
