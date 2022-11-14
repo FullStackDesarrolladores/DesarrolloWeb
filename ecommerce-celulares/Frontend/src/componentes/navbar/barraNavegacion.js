@@ -12,6 +12,7 @@ function BarraNavegacion() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/carrito">Carrito</Nav.Link>
+            <Nav.Link href="/admin-view">administrador</Nav.Link>
             <Nav.Link href="/reporte">Reporte de Ventas</Nav.Link>
           </Nav>
         </Navbar.Collapse>
