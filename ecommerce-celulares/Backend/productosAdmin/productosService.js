@@ -39,30 +39,6 @@ const productosgetid = async (id) => {
     return productoEncontrado
 }
 
-const productosgetref = async (ref) => {
-
-    let productoEncontrado = null
-
-    const { collection, client } = await getConnection();
-
-    await collection.findOne({ "ref": ref })
-
-        .then((res) => {
-
-            productoEncontrado = res;
-
-        }
-        ).catch(
-            () => {
-                console.log("no se encontró elemento")
-            }
-        )
-
-    await getMongo.closeclient(client);
-
-
-    return productoEncontrado
-}
 
 const productosset = async (producto) => {
 
@@ -137,8 +113,8 @@ const productospatch = async (productoEnviado) => {
 }
 
 const productosdelete = async (productoEliminar) => {
-
-    var prodDel = await productosgetid(productoEliminar._id);
+    
+    var prodDel = await productosgetid(productoEliminar);
 
     const cliente = request.delete(
         "http:/localhost:8081/productos", { data: prodDel }
@@ -149,7 +125,7 @@ const productosdelete = async (productoEliminar) => {
 
                 const { collection, client } = await getConnection();
 
-                await collection.deleteOne({ "_id": ObjectId(productoEliminar._id) });
+                await collection.deleteOne({ "_id": ObjectId(productoEliminar) });
 
                 await getMongo.closeclient(client);
 

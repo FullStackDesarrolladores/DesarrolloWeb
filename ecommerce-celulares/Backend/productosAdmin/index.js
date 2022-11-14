@@ -39,9 +39,9 @@ app.patch(pathname,
 		res.send(await productosService.productosPatch(req.body))
 	}
 )
-app.delete(pathname,
+app.delete(pathname+"/id",
 	async (req, res) => {
-		res.send(await productosService.productosDelete(req.body))
+		res.send(await productosService.productosDelete(req.query.id))
 	}
 )
 

@@ -88,7 +88,7 @@ function CarritoProductos() {
                         </tbody>
                         <div className="carritoBotones">
                             <Boton url="/" nombre='Finalizar Compra' click={() => comprar()} />
-                            <Boton url="/carrito" nombre='Borrar Carrito' click={() => borrar()} />
+                            <Boton url="/" nombre='Borrar Carrito' click={() => borrar()} />
                         </div>
 
                     </div>
