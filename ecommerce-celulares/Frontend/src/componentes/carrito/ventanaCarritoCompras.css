@@ -21,10 +21,11 @@
   }
   
   .imgCarrito{
-    height: 125px;
+    height: 200px;
   }
   
   .carritoThumb {
+    width: 200px;
     height: 200px
   }
   
@@ -72,13 +73,20 @@
     text-align: center;
   }
   
+  
   .carritoBoton {
     padding: 1rem 10rem;
     font-size: 1rem;
   }
   
   .carritoBotones{
-    display: flex;
-    padding: 3rem;
-    justify-content: end;
+    margin-top: 20px;
+    display: grid;
+    grid-gap: 10px;
+    min-width: 200px;
+    max-width: 200px;
+  }
+
+  .carritoBotones a{
+   width: 100%;
   }

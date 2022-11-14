@@ -40,8 +40,7 @@ const carritogetref = async (ref) => {
 }
 
 const carritoset = async (producto) => {
-    console.log(producto)
-    console.log(await carritogetref(producto._id))
+
     if(await carritogetref(producto._id)!= null){
         await carritopatch(producto._id)
     }else{
@@ -77,13 +76,14 @@ const carritopatch = async (referencia) => {
     return await carritoget();
 }
 
-const carritodelete = async (productoEliminar) => {
+const carritodelete = async () => {
 
-    console.log(productoEliminar.ref)
 
     const { collection, client } = await getConnection();
 
-    await collection.deleteOne({ "ref":  productoEliminar.ref });
+    //await collection.deleteOne({ "ref":  productoEliminar.ref });
+
+    await collection.deleteMany({})
 
     await getMongo.closeclient(client);
 

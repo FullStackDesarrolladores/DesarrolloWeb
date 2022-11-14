@@ -21,8 +21,8 @@ const productogetid = async (id) => {
     let productoEncontrado = null
 
     const { collection, client } = await getConnection();
-
-    await collection.findOne({ "_id": new ObjectId(id) })
+    try {
+        await collection.findOne({ "_id": new ObjectId(id) })
 
         .then((res) => {
             productoEncontrado = res;
@@ -32,8 +32,11 @@ const productogetid = async (id) => {
                 console.log("no se encontró elemento")
             }
         )
-
-    await getMongo.closeclient(client);
+    } catch (error) {
+        productoEncontrado = "{mensaje: Referencia no valida, producto no existe}"
+    }finally{
+        await getMongo.closeclient(client);
+    }    
 
     return productoEncontrado
 }
